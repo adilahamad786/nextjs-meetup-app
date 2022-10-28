@@ -25,28 +25,28 @@ function HomePage(props) {
   );
 }
 
-// run for each request on server and generate each time a new page on server for serving to client.
-export async function getServerSideProps(context) { // work as middleware like node js and also give more backend functinality to check authentication because this function run on server.
-  const req = context.req;
-  const res = context.res;
+// // run for each request on server and generate each time a new page on server for serving to client.
+// export async function getServerSideProps(context) { // work as middleware like node js and also give more backend functinality to check authentication because this function run on server.
+//   const req = context.req;
+//   const res = context.res;
 
-  // fetch data from APIs and many more
+//   // fetch data from APIs and many more
 
-  return {
-    props : {
-      meetups : DUMMY_MEETUPS
-    }
-  }
-}
-
-// export async function getStaticProps() { // this function run during the bulid process and generate meaningfull static page for helps to improve SEO.
-//   // also able to fetch data form APIs.
 //   return {
 //     props : {
 //       meetups : DUMMY_MEETUPS
-//     },
-//     revalidate : 10  // this time the static page regenerate every 10 second accourding to available data on server side and generate new static page on server for serve a new page after every 10 second.
-//   };
-// };
+//     }
+//   }
+// }
+
+export async function getStaticProps() { // this function run during the bulid process and generate meaningfull static page for helps to improve SEO.
+  // also able to fetch data form APIs.
+  return {
+    props : {
+      meetups : DUMMY_MEETUPS
+    },
+    revalidate : 1  // this time the static page regenerate every 1 second accourding to available data on server side and generate new static page on server for serve a new page after every 1 second.
+  };
+};
 
 export default HomePage;
