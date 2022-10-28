@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import MeetupList from "../components/meetups/MeetupList";
 
 const DUMMY_MEETUPS = [
@@ -20,19 +19,20 @@ const DUMMY_MEETUPS = [
   },
 ];
 
-function HomePage() {
-  const [loadedMeetups, setLoadedMeetups] = useState([]);
-
-  useEffect(() => {
-    // may be fetching data from server
-    setLoadedMeetups(DUMMY_MEETUPS);
-  }, [])
-
+function HomePage(props) { 
   return (
-    <MeetupList meetups={loadedMeetups} />
+    <MeetupList meetups={props.meetups} />
   );
 }
 
-export default HomePage;
+export async function getStaticProps() { // this function run during the bulid process and generate meaningfull static page for helps to improve SEO.
+  // also able to fetch data form APIs.
+  return {
+    props : {
+      meetups : DUMMY_MEETUPS
+    },
+    revalidate : 10  // this time the static page regenerate every 10 second accourding to available data on server side and generate new static page on server for serve a new page after every 10 second.
+  };
+};
 
-// NOTE : problem with this code is that in the initial load the meetups contain empty array so page render without meetups data, then next convert it initial state as a static page, after this useEffect run then change empty array to fetched data and reload meaningful page, but the static page contain only first state snapshot so this is a problem for SEO.
+export default HomePage;
