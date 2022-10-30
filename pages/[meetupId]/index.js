@@ -34,7 +34,7 @@ export async function getStaticPaths() {
   client.close();
 
   return {
-    fallback: false, // that means we define all static paths id inside the path array if path id not match inside the given paths array then simply give a 404 page bydefault, if we put as 'true' then we simple say if come any page id which are not contain in paths array then this render automatically according page.
+    fallback: 'blocking', // This is show empty page whenever dosen't generate a static page for perticular url id. 
     paths: meetups.map((meetup) => ({
       // generate dynamically paths using id's
       params: {
