@@ -1,3 +1,4 @@
+import { MongoClient } from 'mongodb';
 import MeetupList from "../components/meetups/MeetupList";
 
 const DUMMY_MEETUPS = [
@@ -41,9 +42,25 @@ function HomePage(props) {
 
 export async function getStaticProps() { // this function run during the bulid process and generate meaningfull static page for helps to improve SEO.
   // also able to fetch data form APIs.
+
+  const client = await MongoClient.connect("mongodb+srv://Ju123Atla:JEMUzqtQk6MI1aJi@cluster0.rm8ojbq.mongodb.net/meetups?retryWrites=true&w=majority");
+
+  const db = client.db();
+
+  const meetupsCollection = db.collection('meetups');
+
+  const meetups = await meetupsCollection.find().toArray();
+
+  client.close();
+
   return {
     props : {
-      meetups : DUMMY_MEETUPS
+      meetups : meetups.map(meetup => ({
+          title : meetup.title,
+          address : meetup.address,
+          image : meetup.image,
+          id : meetup._id.toString()
+        }))
     },
     revalidate : 1  // this time the static page regenerate every 1 second accourding to available data on server side and generate new static page on server for serve a new page after every 1 second.
   };
